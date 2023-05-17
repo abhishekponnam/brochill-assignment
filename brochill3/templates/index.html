@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Image Search and Upload</title>
+    <style>
+        /* CSS styles for centering and enhanced UI design */
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .upload-form,
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-form label,
+        .search-form label {
+            display: block;
+            margin-bottom: 10px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .upload-form input[type="file"],
+        .upload-form input[type="text"],
+        .search-form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .upload-form input[type="submit"],
+        .search-form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-form input[type="submit"]:hover,
+        .search-form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .search-results {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .image-card {
+            margin: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .image-card p {
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .no-results {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #888;
+        }
+
+        .success-message {
+            text-align: center;
+            margin: 20px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Search and Upload</h1>
+
+        <form class="upload-form" action="/" method="POST" enctype="multipart/form-data">
+            <label for="image">Choose an image to upload:</label>
+            <input type="file" name="image" id="image">
+            <label for="tags">Add tags (separated by commas):</label>
+            <input type="text" name="tags" id="tags">
+            <input type="submit" value="Upload">
+        </form>
+
+        {% if success_message %}
+            <div class="success-message">{{ success_message }}</div>
+        {% endif %}
+
+        <form class="search-form" action="/search" method="GET">
+            <label for="tags">Search by tags:</label>
+            <input type="text" name="tags" id="tags" value="{{ search_tags }}">
+            <input type="submit" value="Search">
+        </form>
+
+        {% if results %}
+            <div class="search-results">
+                {% for result in results %}
+                    <div class="image-card">
+                        <img src="{{ result[1] }}" alt="{{ result[2] }}">
+                        <p>Tags: {{ result[2] }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif search_tags %}
+            <div class="no-results">No images found.</div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
